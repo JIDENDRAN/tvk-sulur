@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVK IT CELL | Tamilaga Vettri Kazhagam Official Digital Portal</title>
+  <meta name="description"
+    content="The official digital backbone of Tamilaga Vettri Kazhagam. Driven by technology, dedicated to the people of Tamil Nadu. Together for a better tomorrow." />
+</head>
+
+<body>
+  <tvk-header></tvk-header>
+  <script type="module" src="/src/header.js"></script>
+
+  <main>
+    <!-- Hero Section (Combined with Breaking News) -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <h2 class="tamil-text">நிமிர்ந்து நில்... துணிந்து செல்...</h2>
+          <h1 data-reveal>TAMILAGA<br><span>VETTRI KAZHAGAM</span></h1>
+          <div class="subtitle">
+            <p class="tamil-text" style="font-size: 1.4rem; color: var(--poster-yellow); font-weight: 700;">தமிழக வெற்றி
+              கழகம் - மக்கள் சேவைக்கு நவீன தொழில்நுட்பம்!</p>
+            <p class="hero-english-copy" style="font-size: 1.1rem; opacity: 0.9;">Empowering Tamil Nadu through unified
+              vision and cutting-edge
+              digital infrastructure. We are more than a party; we are a movement for change.</p>
+          </div>
+          <div class="hero-actions" style="display: flex; gap: 15px; margin-top: 2rem;">
+            <a href="#problems" class="btn-contact"
+              style="background: var(--poster-yellow); color: var(--black) !important; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.9rem;">JOIN
+              THE MOVEMENT</a>
+            <a href="/grievances.html"
+              style="color: white; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px;">Track
+              Grievances <i data-lucide="arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="hero-img" data-reveal>
+          <img id="hero-image" src="/Vijay-Political-Party.webp"
+            alt="TVK Leadership - MLA Ayyanar &amp; President Vijay">
+        </div>
+      </div>
+
+      <!-- Breaking News Ticker -->
+      <div class="hero-ticker">
+        <div class="hero-ticker__badge">
+          <span>HISTORIC WIN</span>
+        </div>
+        <div class="hero-ticker__scroll">
+          <div class="hero-ticker__text">
+            <span class="tamil-text">தமிழக வெற்றி கழகம் 108 இடங்களில் வெற்றி!</span> | TVK wins 108 seats in 2026
+            Assembly Election | <span class="tamil-text">வரலாற்றுச் சாதனை படைத்த தமிழக வெற்றி கழகம்!</span> |
+            Breaking the 59-year political duopoly in Tamil Nadu...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grievance Section -->
+    <section id="problems" class="mla-grievance-section">
+      <div class="container mla-grievance-container">
+
+        <!-- Grievance Form -->
+        <div class="grievance-column" data-reveal>
+          <div class="grievance-card">
+            <div class="grievance-header">
+              <i data-lucide="message-square-plus"></i>
+              <div>
+                <h3 class="tamil-text" id="grievance-title">கோரிக்கை விவரங்கள்</h3>
+                <p id="grievance-subtitle">Report, track, and resolve with direct constituency support.</p>
+              </div>
+            </div>
+
+            <form id="grievance-form" class="grievance-form">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="tamil-text">உங்கள் பெயர் (Your Name)</label>
+                  <input type="text" id="citizen-name" name="name" placeholder="Enter your full name"
+                    autocomplete="name" required>
+                </div>
+                <div class="form-group">
+                  <label class="tamil-text">தொலைபேசி எண் (Phone Number)</label>
+                  <input type="tel" id="citizen-phone" name="phone" placeholder="Enter your mobile number"
+                    autocomplete="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+                </div>
+                <div class="form-group">
+                  <div class="field-label-row">
+                    <label class="tamil-text" for="citizen-constituency">தொகுதி / பகுதி (Constituency / Area)</label>
+                    <button type="button" class="field-tool-btn" id="use-location-btn">
+                      <i data-lucide="map-pin"></i>
+                      <span>Use Location</span>
+                    </button>
+                  </div>
+                  <input type="text" id="citizen-constituency" name="constituency" placeholder="e.g. Madurai South"
+                    required>
+                  <p class="location-status" id="location-status">Add area name or capture your current location.</p>
+                </div>
+                <div class="form-group">
+                  <label class="tamil-text">பிரச்சினையின் வகை (Category)</label>
+                  <div class="category-shortcuts" aria-label="Quick category selection">
+                    <button type="button" data-category="roads">Roads</button>
+                    <button type="button" data-category="water">Water</button>
+                    <button type="button" data-category="electricity">Power</button>
+                    <button type="button" data-category="sanitation">Cleanliness</button>
+                  </div>
+                  <select id="citizen-category" name="category" required>
+                    <option value="">Select Category</option>
+                    <option value="roads">Roads &amp; Infrastructure</option>
+                    <option value="water">Water Supply</option>
+                    <option value="electricity">Electricity</option>
+                    <option value="sanitation">Sanitation</option>
+                    <option value="welfare">Welfare Schemes</option>
+                    <option value="others">Others</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="description-label-row">
+                  <label class="tamil-text" for="citizen-description">பிரச்சினையின் விவரம் (Problem
+                    Description)</label>
+                  <button type="button" class="voice-btn" id="voice-type-btn" aria-pressed="false">
+                    <i data-lucide="mic"></i>
+                    <span>Voice Type</span>
+                  </button>
+                </div>
+                <textarea id="citizen-description" name="description" rows="5"
+                  placeholder="Describe the issue, location landmark, and how long it has been happening..."
+                  minlength="20" required></textarea>
+                <div class="description-helper">
+                  <p class="voice-status" id="voice-status">Tap Voice Type and speak in Tamil or English.</p>
+                  <span id="description-count">0 / 500</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="tamil-text" for="citizen-photo">புகைப்படம் சேர்க்கவும் (Upload Photo)</label>
+                <label class="photo-upload-box" for="citizen-photo">
+                  <i data-lucide="image-plus"></i>
+                  <span>Attach issue photo</span>
+                  <small>JPG, PNG, or WebP up to 5 MB</small>
+                </label>
+                <input type="file" id="citizen-photo" name="photo" accept="image/*" class="photo-input">
+                <div class="photo-preview" id="photo-preview" hidden>
+                  <img id="photo-preview-img" alt="Selected grievance photo preview">
+                  <div>
+                    <strong id="photo-file-name"></strong>
+                    <button type="button" id="remove-photo-btn">Remove photo</button>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="submit-btn" id="submit-btn">
+                <span class="tamil-text">கோரிக்கையைச் சமர்ப்பிக்கவும்</span>
+                <span>Submit Request</span>
+              </button>
+            </form>
+            <div id="form-success" class="form-success" style="display: none;">
+              <i data-lucide="check-circle-2"></i>
+              <h3 class="tamil-text">உங்கள் கோரிக்கை வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!</h3>
+              <p>Your Request ID: <strong id="success-track-id">TVK-GR-2026-X892</strong></p>
+              <p>Our constituency manager will contact you within 48 hours for verification.</p>
+            </div>
+          </div>
+
+          <!-- Grievance Tracking Standalone Card -->
+          <div class="tracking-card" data-reveal>
+            <div class="tracking-header">
+              <i data-lucide="search"></i>
+              <div>
+                <h4>Check Grievance Status</h4>
+                <p>Enter your TNX ID to see the latest action on your grievance.</p>
+              </div>
+            </div>
+            <form id="track-form" class="tracking-body">
+              <div class="tracking-form-group">
+                <label>TNX / Track ID</label>
+                <div class="tracking-input-row">
+                  <input type="text" id="track-id-input" placeholder="TVK-GR-2026-0001" required>
+                  <button type="submit" class="track-submit-btn">CHECK STATUS</button>
+                </div>
+                <small>Use the TNX ID shared after grievance submission.</small>
+              </div>
+
+              <div id="track-result"
+                style="display: none; margin-top: 25px; padding: 20px; background: #fdfaf2; border-radius: 8px; border-left: 5px solid var(--poster-yellow);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                  <i data-lucide="clock" style="color: var(--poster-yellow); width: 20px;"></i>
+                  <h4 style="margin: 0; font-size: 1.1rem; color: #333;">Status: <span style="color: #d97706;">Under
+                      Review</span></h4>
+                </div>
+                <p style="margin: 0; font-size: 0.95rem; color: #555; line-height: 1.5;">Your request is currently being
+                  reviewed by the MLA office. We will follow up with the concerned department shortly.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Desktop Right Side Info Panel -->
+        <div class="desktop-info-panel">
+          <style>
+            .desktop-info-panel {
+              display: none;
+            }
+
+            @media (min-width: 993px) {
+              .desktop-info-panel {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+                position: sticky;
+                top: 100px;
+              }
+            }
+
+            .info-card {
+              background: white;
+              border-radius: 12px;
+              padding: 30px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+              border: 1px solid #f0f0f0;
+              border-top: 4px solid var(--poster-yellow);
+            }
+
+            .info-card.red-border {
+              border-top-color: var(--poster-red);
+            }
+
+            .info-card h4 {
+              font-size: 1.25rem;
+              color: var(--black);
+              margin-bottom: 20px;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              font-weight: 800;
+            }
+
+            .info-card h4 i {
+              color: var(--poster-red);
+            }
+
+            .step-list {
+              display: flex;
+              flex-direction: column;
+              gap: 20px;
+            }
+
+            .step-item {
+              display: flex;
+              gap: 15px;
+            }
+
+            .step-number {
+              width: 32px;
+              height: 32px;
+              background: #fff9f0;
+              color: var(--poster-red);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 800;
+              flex-shrink: 0;
+              border: 1px solid #fce8d7;
+            }
+
+            .step-content h5 {
+              margin: 0 0 5px 0;
+              font-size: 1rem;
+              color: #333;
+              font-weight: 700;
+            }
+
+            .step-content p {
+              margin: 0;
+              font-size: 0.9rem;
+              color: #666;
+              line-height: 1.5;
+            }
+
+            .contact-item {
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              margin-bottom: 15px;
+              padding-bottom: 15px;
+              border-bottom: 1px solid #f0f0f0;
+            }
+
+            .contact-item:last-child {
+              margin-bottom: 0;
+              padding-bottom: 0;
+              border-bottom: none;
+            }
+
+            .contact-icon {
+              width: 40px;
+              height: 40px;
+              background: #fafafa;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--poster-red);
+            }
+
+            .contact-details h5 {
+              margin: 0 0 3px 0;
+              font-size: 0.9rem;
+              color: #888;
+            }
+
+            .contact-details p {
+              margin: 0;
+              font-size: 1.05rem;
+              color: #222;
+              font-weight: 700;
+            }
+          </style>
+
+          <div class="info-card">
+            <h4><i data-lucide="check-circle-2"></i> How It Works</h4>
+            <div class="step-list">
+              <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h5>Submit Your Grievance</h5>
+                  <p>Fill out the form with details, location, and a photo of the issue.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h5>Get Your Track ID</h5>
+                  <p>Receive a unique TNX ID to track the progress of your request.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h5>MLA Office Review</h5>
+                  <p>Our team verifies the issue and forwards it to the relevant department.</p>
+                </div>
+              </div>
+              <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h5>Action & Resolution</h5>
+                  <p>The problem is addressed, and the status is updated on this portal.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-card red-border">
+            <h4 class="tamil-text"><i data-lucide="phone"></i> சட்டமன்ற உறுப்பினர் அலுவலகம்</h4>
+            <div class="contact-item">
+              <div class="contact-icon"><i data-lucide="map-pin"></i></div>
+              <div class="contact-details">
+                <h5 class="tamil-text">அலுவலக முகவரி (Address)</h5>
+                <p style="font-size: 0.95rem;">Kannampalayam ,Sulur,<br> Coimbatore District - 641402</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon"><i data-lucide="phone-call"></i></div>
+              <div class="contact-details">
+                <h5 class="tamil-text">தொடர்பு எண் (Phone)</h5>
+                <p>+91 91507 81685</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Info -->
+    <footer class="bottom-banner">
+      <div class="logo-footer">
+        <div class="flex-center">
+          <img src="/logo.png" width="60" alt="Logo">
+          <div>
+            <h2 class="tamil-text"
+              style="color: var(--poster-red); font-weight: 900; font-size: 2.2rem; line-height: 1;">CODE THRIVE
+              INFOTECH</h2>
+            <p class="tamil-text">தொழில்நுட்பம் மூலம் உங்கள் சேவையை மேம்படுத்துவோம். <br> <small>Official Technology
+                Partner of TVK</small></p>
+          </div>
+        </div>
+        <div class="tamil-text"
+          style="background: var(--poster-yellow); padding: 15px; border-radius: 10px; font-weight: 700;">
+          வாங்க! இணைந்து சிறந்த மாற்றத்தை உருவாக்குவோம்! <br>
+          <span>Let's build a better tomorrow together!</span>
+        </div>
+      </div>
+
+      <div class="contact-row-secondary">
+        <div class="call-pill">
+          <i data-lucide="phone-call" style="color: white; width: 30px; height: 30px;"></i>
+          <div style="color: white; line-height: 1;">State Hotline <br> <span class="num">9150781685</span></div>
+        </div>
+        <div class="flex-center" style="color: #333; font-weight: 600;">
+          <i data-lucide="globe"></i> www.tvkdigital.in
+        </div>
+        <div class="flex-center" style="color: #333; font-weight: 600;">
+          <i data-lucide="map-pin"></i> HQ - Coimbatore, Tamil Nadu
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

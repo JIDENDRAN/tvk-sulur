@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Today's Grievances & Resolutions | TVK Digital</title>
+  <meta name="description"
+    content="Real-time public board displaying grievances received today and solved cases with official action taken details from Tamilaga Vettri Kazhagam." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Hind+Madurai:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --poster-red: #C6151B;
+      --poster-yellow: #FECE08;
+      --poster-dark-red: #8B0000;
+      --white: #FFFFFF;
+      --black: #000000;
+      --grey: #F8FAFC;
+      --border-color: #E2E8F0;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', 'Hind Madurai', sans-serif;
+      background: var(--grey);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #334155;
+    }
+
+    .tamil-text {
+      font-family: 'Hind Madurai', sans-serif;
+    }
+
+    main {
+      padding-bottom: 80px;
+    }
+
+    /* ── Hero Banner ── */
+    .page-hero {
+      background: radial-gradient(circle at center, #FFD700 0%, var(--poster-red) 70%, var(--poster-dark-red) 100%);
+      padding: 80px 20px;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+    }
+
+    .page-hero .kicker {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.25);
+      color: var(--poster-yellow);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 30px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(254, 206, 8, 0.4);
+    }
+
+    .page-hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .page-hero h1 span {
+      color: var(--poster-yellow);
+    }
+
+    .page-hero p.sub {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      margin-top: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Dashboard Layout ── */
+    .dashboard-container {
+      max-width: 1300px;
+      margin: 40px auto 0;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* ── Board Columns ── */
+    .board-column {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 500px;
+    }
+
+    .column-header {
+      padding: 24px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .column-header.today {
+      background: linear-gradient(135deg, rgba(198, 21, 27, 0.02), rgba(254, 206, 8, 0.05));
+      border-bottom-color: rgba(198, 21, 27, 0.1);
+    }
+
+    .column-header.solved {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.02), rgba(16, 185, 129, 0.05));
+      border-bottom-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .column-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .column-title i {
+      width: 24px;
+      height: 24px;
+    }
+
+    .column-header.today .column-title i {
+      color: var(--poster-red);
+    }
+
+    .column-header.solved .column-title i {
+      color: #10B981;
+    }
+
+    .column-title h2 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #1E293B;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .column-title h2 small {
+      display: block;
+      font-size: 0.72rem;
+      color: #64748B;
+      font-weight: 700;
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+
+    /* Glowing Pulse Dot */
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--poster-red);
+      border-radius: 50%;
+      position: relative;
+      display: inline-block;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      width: 100%;
+      height: 100%;
+      background-color: var(--poster-red);
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: pulse-ring 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+
+    /* Solved Check Badge */
+    .solved-badge {
+      background: #D1FAE5;
+      color: #059669;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .column-count {
+      background: #F1F5F9;
+      color: #475569;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .column-header.today .column-count {
+      background: rgba(198, 21, 27, 0.08);
+      color: var(--poster-red);
+    }
+
+    .column-header.solved .column-count {
+      background: rgba(16, 185, 129, 0.08);
+      color: #10B981;
+    }
+
+    /* ── Cards List inside Columns — single horizontal swipe row ── */
+    .cards-list {
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;          /* ← force single row, never wrap */
+      gap: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;       /* hide scrollbar Firefox */
+      max-height: none;
+      min-height: 260px;
+      align-items: stretch;
+    }
+    .cards-list::-webkit-scrollbar { display: none; } /* hide scrollbar Chrome/Safari */
+
+    .grievance-card {
+      background: var(--white);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+      transition: var(--transition);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      /* ─ keep every card the same width and never let it shrink ─ */
+      flex: 0 0 300px;          /* don't grow · don't shrink · always 300px */
+      width: 300px;
+      min-width: 300px;
+      scroll-snap-align: start; /* snap each card into view on swipe */
+    }
+
+    .grievance-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+      border-color: rgba(198, 21, 27, 0.15);
+    }
+
+    .card-image-wrap {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+      background: #F1F5F9;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .grievance-card:hover .card-image-wrap img {
+      transform: scale(1.04);
+    }
+
+    .card-meta-bar {
+      padding: 14px 20px;
+      background: #F8FAFC;
+      border-bottom: 1px solid #F1F5F9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .track-badge {
+      background: var(--poster-yellow);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .card-date {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #64748B;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .citizen-info {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .info-item i {
+      width: 14px;
+      height: 14px;
+    }
+
+    .info-item.name i {
+      color: #64748B;
+    }
+
+    .info-item.location i {
+      color: var(--poster-red);
+    }
+
+    .category-tag {
+      align-self: flex-start;
+      background: #F1F5F9;
+      color: #475569;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid #E2E8F0;
+    }
+
+    .grievance-desc {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: #334155;
+      background: #FAFBFC;
+      border-left: 3px solid #CBD5E1;
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+    }
+
+    /* ── Action Taken Block (Only for Solved list) ── */
+    .action-box {
+      margin-top: auto;
+      padding: 16px 20px;
+      border-top: 1px solid #D1FAE5;
+      background: #F6FCF9;
+    }
+
+    .action-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #059669;
+      margin-bottom: 6px;
+    }
+
+    .action-header i {
+      width: 16px;
+      height: 16px;
+    }
+
+    .action-content {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #334155;
+      font-weight: 500;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .empty-state i {
+      width: 48px;
+      height: 48px;
+      color: #94A3B8;
+      margin-bottom: 12px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .empty-state p {
+      color: #64748B;
+      font-size: 0.88rem;
+      max-width: 280px;
+      line-height: 1.5;
+    }
+
+    /* ── Footer ── */
+    footer.bottom-strip {
+      background: var(--poster-red);
+      text-align: center;
+      padding: 20px;
+      color: white;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-top: 60px;
+    }
+
+    footer.bottom-strip span {
+      color: var(--poster-yellow);
+    }
+
+    /* ── Loading Spinner ── */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 100px 20px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(198, 21, 27, 0.1);
+      border-top-color: var(--poster-red);
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+      margin-bottom: 12px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 992px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .board-column {
+        min-height: auto;
+      }
+
+      /* Disable scroll trapping on tablet/mobile views and force side-by-side cards */
+      .cards-list {
+        max-height: none !important;
+        overflow-y: visible !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 0 1rem;
+      }
+      .page-hero {
+        padding: 50px 15px;
+      }
+      .page-hero h1 {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .page-hero {
+        padding: 40px 10px;
+      }
+      .page-hero h1 {
+        font-size: 1.5rem;
+      }
+      .column-header {
+        padding: 16px;
+      }
+      .cards-list {
+        padding: 8px !important;
+        gap: 10px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      .grievance-card {
+        border-radius: 8px;
+      }
+      .card-image-wrap {
+        height: 120px !important;
+      }
+      .card-body {
+        padding: 10px !important;
+        gap: 8px !important;
+      }
+      .track-badge {
+        font-size: 0.68rem !important;
+        padding: 2px 6px !important;
+      }
+      .card-date {
+        font-size: 0.72rem !important;
+      }
+      .citizen-info {
+        font-size: 0.75rem !important;
+        gap: 6px !important;
+      }
+      .category-tag {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+      }
+      .grievance-desc {
+        padding: 6px 8px !important;
+        font-size: 0.78rem !important;
+      }
+      .action-box {
+        padding: 10px !important;
+      }
+      .action-header {
+        font-size: 0.75rem !important;
+        margin-bottom: 4px !important;
+      }
+      .action-content {
+        font-size: 0.75rem !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Web Component -->
+  <tvk-header></tvk-header>
+  <script type="module" src="/src/header.js"></script>
+
+  <main>
+    <!-- Hero Header -->
+    <section class="page-hero">
+      <span class="kicker tamil-text">கோரிக்கைகள் & தீர்வுகள்</span>
+      <h1>குடிமக்கள் கோரிக்கை <span>கண்காணிப்பு</span></h1>
+      <p class="sub">Live Feed: Today's Received Grievances & Official Solved Resolutions</p>
+    </section>
+
+    <!-- Double Board Dashboard -->
+    <section class="dashboard-container">
+
+      <!-- COLUMN 1: RESOLVED & SOLUTIONS -->
+      <div class="board-column">
+        <div class="column-header solved">
+          <div class="column-title">
+            <i data-lucide="shield-check"></i>
+            <h2>
+              Resolved Cases
+              <small class="tamil-text">தீர்க்கப்பட்ட கோரிக்கைகள்</small>
+            </h2>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="solved-badge"><i data-lucide="check" style="width:12px; height:12px;"></i> solved</span>
+            <span class="column-count" id="solved-count">0</span>
+          </div>
+        </div>
+
+        <div class="cards-list" id="solved-feed">
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Syncing resolved archive...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUMN 2: TODAY'S RECEIVED -->
+      <div class="board-column">
+        <div class="column-header today">
+          <div class="column-title">
+            <i data-lucide="bell-ring"></i>
+            <h2>
+              Today's Received
+              <small class="tamil-text">இன்று பெறப்பட்ட கோரிக்கைகள்</small>
+            </h2>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="pulse-dot"></span>
+            <span class="column-count" id="today-count">0</span>
+          </div>
+        </div>
+
+        <div class="cards-list" id="today-feed">
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Syncing today's records...</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="bottom-strip">
+    <span>TVK DIGITAL</span> · Official Public Redressal & Transparency Interface
+  </footer>
+
+  <!-- Icons and Client Script -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    const API_BASE = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      syncDashboard();
+    });
+
+    async function syncDashboard() {
+      const todayContainer = document.getElementById('today-feed');
+      const solvedContainer = document.getElementById('solved-feed');
+
+      try {
+        const response = await fetch(`${API_BASE}/api/public/grievances`);
+        const result = await response.json();
+
+        if (result.success) {
+          const grievances = result.data || [];
+
+          // 1. Filter strictly received today
+          // Date string format helper
+          const todayStr = new Date().toDateString();
+          const todayItems = grievances.filter(g => {
+            if (!g.created_at) return false;
+            return new Date(g.created_at).toDateString() === todayStr;
+          });
+
+          // 2. Filter resolved
+          const solvedItems = grievances.filter(g => g.status === 'Resolved');
+
+          // Render Today's Column
+          renderColumn(todayContainer, todayItems, false, 'today-count');
+
+          // Render Solved Column
+          renderColumn(solvedContainer, solvedItems, true, 'solved-count');
+
+        } else {
+          showError(todayContainer, 'Unable to sync today\'s data.');
+          showError(solvedContainer, 'Unable to sync solved archive.');
+        }
+      } catch (error) {
+        console.error('API Fetch Error:', error);
+        showError(todayContainer, 'Network failure connecting to server.');
+        showError(solvedContainer, 'Network failure connecting to server.');
+      }
+    }
+
+    function renderColumn(container, items, isResolvedList, counterId) {
+      document.getElementById(counterId).textContent = items.length;
+
+      if (items.length === 0) {
+        if (isResolvedList) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i data-lucide="activity"></i>
+              <h3>Archive Updating</h3>
+              <p>Resolved query entries and actions taken reports are being updated by the MLA office.</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i data-lucide="check-circle-2" style="color: #10B981;"></i>
+              <h3>All Clear Today!</h3>
+              <p>No new grievances have been reported today yet. Submissions are processed in real-time.</p>
+            </div>
+          `;
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = items.map(g => {
+        const trackId = `TVK-GR-2026-${String(g.id).padStart(4, '0')}`;
+        const dateStr = new Date(g.created_at).toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+        const categoryName = g.category.charAt(0).toUpperCase() + g.category.slice(1);
+
+        let imageHtml = '';
+        if (g.photo_data) {
+          imageHtml = `
+            <div class="card-image-wrap">
+              <img src="${g.photo_data}" alt="${escapeHtml(g.photo_name || 'Grievance Image')}" loading="lazy" />
+            </div>
+          `;
+        }
+
+        let actionBox = '';
+        if (isResolvedList) {
+          actionBox = `
+            <div class="action-box">
+              <div class="action-header">
+                <i data-lucide="shield-check"></i> Action Taken & Resolution
+              </div>
+              <div class="action-content">
+                ${escapeHtml(g.admin_notes || 'This grievance was successfully investigated and resolved by the constituency department.')}
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="grievance-card">
+            <div class="card-meta-bar">
+              <span class="track-badge">${trackId}</span>
+              <span class="card-date">${dateStr}</span>
+            </div>
+            ${imageHtml}
+            <div class="card-body">
+              <div class="citizen-info">
+                <div class="info-item name">
+                  <i data-lucide="user"></i>
+                  <span>${escapeHtml(g.name)}</span>
+                </div>
+                <div class="info-item location">
+                  <i data-lucide="map-pin"></i>
+                  <span>${escapeHtml(g.constituency)}</span>
+                </div>
+              </div>
+              <span class="category-tag">${categoryName}</span>
+              <p class="grievance-desc">"${escapeHtml(g.description)}"</p>
+            </div>
+            ${actionBox}
+          </div>
+        `;
+      }).join('');
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function showError(container, msg) {
+      container.innerHTML = `
+        <div class="empty-state" style="border-top: 3px solid var(--poster-red);">
+          <i data-lucide="alert-triangle" style="color: var(--poster-red);"></i>
+          <h3>Sync Offline</h3>
+          <p>${msg}</p>
+        </div>
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+
+</html>
