@@ -656,8 +656,8 @@ app.delete('/api/admin/members/:id', requireAuth, (req, res) => {
   }
 });
 
-// Wildcard route to serve Vite frontend pages in production
-app.get('*', (req, res, next) => {
+// Wildcard: serve Vite frontend pages in production (use app.use to avoid path-to-regexp v8 issues)
+app.use((req, res, next) => {
   if (req.path.startsWith('/api')) {
     return next();
   }
@@ -666,10 +666,10 @@ app.get('*', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
   } else {
     const hasExtension = path.extname(cleanPath) !== '';
-    const fileToServe = hasExtension 
+    const fileToServe = hasExtension
       ? path.join(__dirname, 'dist', cleanPath)
       : path.join(__dirname, 'dist', `${cleanPath}.html`);
-      
+
     res.sendFile(fileToServe, (err) => {
       if (err) {
         res.sendFile(path.join(__dirname, 'dist', 'index.html'));
